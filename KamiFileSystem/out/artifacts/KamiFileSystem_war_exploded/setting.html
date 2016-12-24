@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="jqueryui/external/jquery/jquery-3.1.1.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Setting</title>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $.get("http://127.0.0.1:8080/KamiFileSystem_war_exploded/setting",function(data,status){
+                var obj = JSON.parse(data);
+                $("#path").val(obj.path);
+            });
+        });
+
+    </script>
+</head>
+<body>
+<form>
+    Path:<br>
+    <input type="text" name="path" id="path">
+</form>
+</body>
+</html>
