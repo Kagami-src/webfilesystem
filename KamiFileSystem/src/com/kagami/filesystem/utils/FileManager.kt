@@ -1,6 +1,7 @@
 package com.kagami.filesystem.utils
 
 import org.apache.commons.codec.digest.DigestUtils
+import org.apache.commons.compress.archivers.zip.ZipArchiveEntry
 import org.apache.commons.compress.archivers.zip.ZipFile
 import org.apache.commons.io.IOUtils
 import java.io.File
@@ -13,8 +14,11 @@ import java.util.*
  */
 object FileManager{
     val fileMap:MutableMap<String, File>
+    val coverNameMap:MutableMap<String, String>
+
     init {
         fileMap=HashMap<String,File>()
+        coverNameMap=HashMap<String,String>()
     }
 
     fun setupWithDic(dir:File){
@@ -34,6 +38,7 @@ object FileManager{
             //val md5 = DigestUtils.md5Hex(fis)
             //IOUtils.closeQuietly(fis)
             fileMap.put(md5,file)
+            findCover(file)?.let { coverNameMap.put(md5, it) }
             return true
         } catch (e: Exception) {
             e.printStackTrace()
@@ -46,16 +51,31 @@ object FileManager{
         return fileMap.get(md5)
     }
 
-    fun getImageInputS(zipMD5:String?):InputStream?{
+    fun findCover(file:File):String?{
+        val zipFile = ZipFile(file)
+        val entries=zipFile.entries
+        var tag:String?=null
+        entries.iterator().forEach {
+            if(it.name.endsWith(".png") || it.name.endsWith(".jpg")){
+                if(tag==null){
+                    tag=it.name
+                }else{
+                    if(tag!!.compareTo(it.name)>0){
+                        tag=it.name
+                    }
+                }
+
+            }
+        }
+        return tag
+    }
+    fun getImageInputStream(zipMD5:String?):InputStream?{
         zipMD5 ?: return null
         val file= fileMap.get(zipMD5)
         file ?: return null
         val zipFile = ZipFile(file)
-        val entries=zipFile.entries
-        entries.iterator().forEach {
-            if(it.name.endsWith(".png") || it.name.endsWith(".jpg")){
-                return zipFile.getInputStream(it)
-            }
+        coverNameMap.get(zipMD5)?.let {
+            return zipFile.getInputStream(zipFile.getEntry(it))
         }
         return null
 

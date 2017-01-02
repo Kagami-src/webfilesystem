@@ -23,7 +23,7 @@ public class ImageFromZipServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String md5=request.getParameter("md5");
-        InputStream is= FileManager.INSTANCE.getImageInputS(md5);
+        InputStream is= FileManager.INSTANCE.getImageInputStream(md5);
         if(is!=null){
             IOUtils.copy(is,response.getOutputStream());
             IOUtils.closeQuietly(is);

@@ -7,6 +7,9 @@
     <script type="text/javascript">
         $(document).ready(function(){
             $.get("filelist",function(obj,status){
+                obj.sort(function (a,b) {
+                    return b.date-a.date
+                })
                 for(var i=0;i<obj.length;i++){
                     var json=obj[i]
                     var title=document.createElement("a")
