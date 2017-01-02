@@ -1,6 +1,8 @@
 package com.kagami.filesystem.ser
 
 import com.kagami.filesystem.utils.DBManager
+import com.kagami.filesystem.utils.FileManager
+import java.io.File
 import javax.servlet.annotation.WebServlet
 import javax.servlet.http.HttpServlet
 import javax.servlet.http.HttpServletRequest
@@ -16,7 +18,12 @@ class SettingServlet: HttpServlet(){
         resp.getWriter().write(DBManager.setting.toString())
     }
 
-    override fun doPost(req: HttpServletRequest?, resp: HttpServletResponse?) {
-
+    override fun doPost(req: HttpServletRequest, resp: HttpServletResponse?) {
+        val roodir=req.getParameter("rootdir")
+        val dlurl=req.getParameter("dlurl")
+        DBManager.putSetting("rootdir",roodir)
+                .putSetting("dlurl",dlurl)
+                .saveSetting()
+        FileManager.setupWithDic(File(roodir))
     }
 }

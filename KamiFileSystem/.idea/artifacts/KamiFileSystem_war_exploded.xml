@@ -8,8 +8,8 @@
           <element id="module-output" name="KamiFileSystem" />
         </element>
         <element id="directory" name="lib">
-          <element id="library" level="project" name="libs" />
           <element id="library" level="project" name="KotlinJavaRuntime" />
+          <element id="library" level="project" name="libs" />
         </element>
       </element>
     </root>

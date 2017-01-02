@@ -15,7 +15,6 @@ object FileManager{
     val fileMap:MutableMap<String, File>
     init {
         fileMap=HashMap<String,File>()
-        setupWithDic(File("/Users/admin/Desktop/tmp"))
     }
 
     fun setupWithDic(dir:File){
@@ -30,9 +29,10 @@ object FileManager{
 
     fun putZipFile(file:File):Boolean{
         try {
-            val fis = FileInputStream(file)
-            val md5 = DigestUtils.md5Hex(fis)
-            IOUtils.closeQuietly(fis)
+            //val fis = FileInputStream(file)
+            val md5 =DigestUtils.md5Hex(file.name)
+            //val md5 = DigestUtils.md5Hex(fis)
+            //IOUtils.closeQuietly(fis)
             fileMap.put(md5,file)
             return true
         } catch (e: Exception) {

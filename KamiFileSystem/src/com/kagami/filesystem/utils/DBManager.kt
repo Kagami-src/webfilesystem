@@ -14,8 +14,13 @@ object DBManager{
     init {
         val settingstr= load("setting")
         setting = toJson(settingstr) ?: JSONObject()
+        val rootpath= setting.optString("rootdir","")
+        if(rootpath.length>0){
+            FileManager.setupWithDic(File(rootpath))
+        }
     }
-    fun putSetting(key:String,value:String):DBManager{
+    fun putSetting(key:String,value:String?):DBManager{
+        value ?: return this
          setting.put(key,value)
          return this
      }

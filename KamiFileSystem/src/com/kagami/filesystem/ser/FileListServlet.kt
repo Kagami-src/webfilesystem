@@ -1,5 +1,6 @@
 package com.kagami.filesystem.ser
 
+import com.kagami.filesystem.utils.DBManager
 import com.kagami.filesystem.utils.FileManager
 import org.json.JSONArray
 import org.json.JSONObject
@@ -23,6 +24,8 @@ class FileListServlet : HttpServlet() {
             json.put("md5",it)
             array.put(json)
         }
+        resp.characterEncoding="utf-8"
+        resp.contentType="text/json;charset=utf-8"
         resp.addHeader("Access-Control-Allow-Origin", "*")
         resp.writer.print(array.toString())
     }
@@ -32,6 +35,7 @@ class FileListServlet : HttpServlet() {
         json.put("size",file.length())
         json.put("filename",file.name)
         json.put("date",file.lastModified())
+        json.put("url",DBManager.setting.optString("dlurl")+file.name)
         return json
     }
 }
